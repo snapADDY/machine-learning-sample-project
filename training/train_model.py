@@ -1,9 +1,9 @@
 import json
 from argparse import ArgumentParser
 from pathlib import Path
+from typing import Union
 
 import numpy as np
-import pandas as pd
 from skl2onnx import convert_sklearn
 from skl2onnx.common.data_types import Int64TensorType
 from sklearn.linear_model import LogisticRegression
@@ -12,8 +12,8 @@ from sklearn.model_selection import cross_val_score
 from package.featurization import VOCABULARY, extract_features
 
 
-def load_dataset(filepath: Path) -> pd.DataFrame:
-    """Load dataset from NDJSON file as DataFrame.
+def load_dataset(filepath: Path) -> list[dict[str, Union[str, int]]]:
+    """Load dataset from NDJSON file as list of dictionaries.
 
     Parameters
     ----------
@@ -22,11 +22,11 @@ def load_dataset(filepath: Path) -> pd.DataFrame:
 
     Returns
     -------
-    pd.DataFrame
-        DataFrame with text and labels.
+    list[dict[str, Union[str, int]]]
+        Data set as list of dictionaries.
     """
     with filepath.open("r", encoding="utf-8") as file:
-        return pd.DataFrame(json.loads(line) for line in file)
+        return [json.loads(line) for line in file]
 
 
 def export_model(model: LogisticRegression, filepath: Path, num_features: int):
@@ -62,8 +62,8 @@ if __name__ == "__main__":
     dataset = load_dataset(args.dataset_filepath)
 
     # prepare data
-    X = np.array([extract_features(example) for example in dataset.loc[:, "text"]])
-    y = dataset.loc[:, "label"].values
+    X = np.array([extract_features(example["text"]) for example in dataset])
+    y = np.array([example["label"] for example in dataset])
 
     if args.cross_validation:
         # model for evaluation
