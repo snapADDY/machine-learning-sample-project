@@ -1,10 +1,13 @@
 # A lightweight machine learning project
 
-tba
+This is an example project for a lightweight and ready-to-deploy machine learning application. Different tools and concepts are used:
+
+- Dependency management with Poetry
+- ...
 
 ## Installation
 
-tba
+Install both production and dev dependencies of the project with [Poetry](https://python-poetry.org/):
 
 ```
 $ poetry install
@@ -12,7 +15,7 @@ $ poetry install
 
 ## Usage
 
-tba
+Start the server:
 
 ```
 $ gunicorn application
@@ -24,7 +27,7 @@ $ gunicorn application
 
 ## Example
 
-tba
+You can POST requets to the `/classification` endpoint:
 
 ```
 $ curl \
