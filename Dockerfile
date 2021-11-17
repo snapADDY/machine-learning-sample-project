@@ -16,12 +16,13 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 # copy appilcation file for gunicorn
 COPY application.py ./
 
-# copy pyproject.toml
+# copy pyproject.toml and lockfile
 COPY pyproject.toml poetry.lock ./
 
 # copy package
-COPY classification ./classification
+COPY package ./package
 
+# install only prod dependencies
 RUN poetry install --no-dev
 
 USER wsgi

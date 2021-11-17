@@ -1,0 +1,8 @@
+# ignore everything by default
+*
+
+# include the following exceptions
+!pyproject.toml
+!poetry.lock
+!application.py
+!package/

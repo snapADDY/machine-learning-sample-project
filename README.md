@@ -12,14 +12,22 @@ $ poetry install
 
 ## Usage
 
-Start the server:
+Start the server locally:
 
 ```
 $ gunicorn application
-[INFO] Starting gunicorn 20.1.0
-[INFO] Listening at: http://127.0.0.1:8000 (46025)
-[INFO] Using worker: sync
-[INFO] Booting worker with pid: 46026
+```
+
+You can also start it in a Docker container. Build it:
+
+```
+$ docker build -t machine-learning-application .
+```
+
+and run it:
+
+```
+docker run -p 8000:8000 machine-learning-application
 ```
 
 ## Example
@@ -30,7 +38,7 @@ You can POST requets to the `/classification` endpoint:
 $ curl \
   --request POST \
   --data '{"text": "Die Sopranos ist eine US-amerikanische Fernsehserie."}' \
-  http://localhost:8000/classification
+  http://0.0.0.0:8000/classification
 {"label": "Fernsehserie", "probability": 0.8808274865150452}
 ```
 
