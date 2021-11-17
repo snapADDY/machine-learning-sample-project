@@ -8,34 +8,40 @@ def test_tokenize():
 
 
 def test_extract_features():
-    assert extract_features("foo bar") == [
+    assert extract_features("Bigger Splash ist ein Gemälde von David Hockney") == [
+        0,
+        0,
+        0,
         1,
+        0,
         0,
         0,
         0,
         0,
     ]
 
-    assert extract_features("foo bar") == [
+    assert extract_features("Die Sopranos ist eine US-amerikanische Fernsehserie") == [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
         1,
+    ]
+
+    assert extract_features("Pretzel Logic ist das dritte Studioalbum der Band Steely Dan") == [
         0,
         0,
+        0,
+        0,
+        0,
+        0,
+        1,
         0,
         0,
     ]
 
-    assert extract_features("foo bar") == [
-        1,
-        0,
-        0,
-        0,
-        0,
-    ]
-
-    assert extract_features("foo bar") == [
-        1,
-        0,
-        0,
-        0,
-        0,
-    ]
+    assert extract_features("foo bar") == [0, 0, 0, 0, 0, 0, 0, 0, 0]

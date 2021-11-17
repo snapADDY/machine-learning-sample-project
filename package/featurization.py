@@ -2,7 +2,7 @@ VOCABULARY = [
     "fernsehserie",
     "episoden",
     "staffeln",
-    "leinwand",
+    "gemälde",
     "museum",
     "öl",
     "studioalbum",
