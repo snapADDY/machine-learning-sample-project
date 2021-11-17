@@ -1,9 +1,8 @@
 import numpy as np
-from falcon import Request, Response
-from falcon.status_codes import HTTP_OK
-
 from classification import utils
 from classification.dtos import RequestDTO, ResponseDTO
+from falcon import Request, Response
+from falcon.status_codes import HTTP_OK
 
 MODEL = utils.load_model("logistic-regression.onnx")
 

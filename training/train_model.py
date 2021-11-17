@@ -8,8 +8,7 @@ from skl2onnx import convert_sklearn
 from skl2onnx.common.data_types import StringTensorType
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import classification_report
-from sklearn.model_selection import  cross_val_score
+from sklearn.model_selection import cross_val_score
 from sklearn.pipeline import Pipeline
 
 
@@ -84,17 +83,24 @@ if __name__ == "__main__":
     if args.cross_validation:
         print(f"Using {args.cross_validation}-fold cross validation")
 
-        # pipelien for evaluation
-        pipeline = create_pipeline()
+        # model for evaluation
+        model = LogisticRegression()
 
         # perform cross-validation
-        scores = cross_val_score(pipeline, dataset.loc[:, "text"], dataset.loc[:, "label"], scoring="accuracy", cv=args.cross_validation, n_jobs=-1)
+        scores = cross_val_score(
+            model,
+            dataset.loc[:, "text"],
+            dataset.loc[:, "label"],
+            scoring="accuracy",
+            cv=args.cross_validation,
+            n_jobs=-1,
+        )
 
         print(scores)
 
     # train final model on full dataset
-    pipeline = create_pipeline()
-    pipeline.fit(dataset.loc[:, "text"], dataset.loc[:, "label"])
+    model = LogisticRegression()
+    model.fit(dataset.loc[:, "text"], dataset.loc[:, "label"])
 
     # export to onnx
-    export_pipeline(pipeline, filepath=args.model_filepath)
+    export_pipeline(model, filepath=args.model_filepath)

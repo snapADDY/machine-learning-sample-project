@@ -4,17 +4,17 @@ from onnxruntime import InferenceSession
 
 
 def load_model(name: str) -> InferenceSession:
-    """[summary]
+    """Load classification model from disk.
 
     Parameters
     ----------
     name : str
-        [description]
+        Filename of the model to load.
 
     Returns
     -------
     InferenceSession
-        [description]
+        Session for inference.
     """
     module_path = Path(__file__).parent.resolve()
     model_filepath = Path(module_path, "model", name)
