@@ -1,9 +1,6 @@
 # A lightweight machine learning project
 
-This is an example project for a lightweight and ready-to-deploy machine learning application. Different tools and concepts are used:
-
-- Dependency management with Poetry
-- ...
+This is an example project for a lightweight and ready-to-deploy machine learning application.
 
 ## Installation
 
