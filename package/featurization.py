@@ -1,5 +1,3 @@
-import numpy as np
-
 VOCABULARY = [
     "fernsehserie",
     "episoden",
@@ -29,7 +27,7 @@ def tokenize(text: str) -> set[str]:
     return set(text.lower().split())
 
 
-def extract_features(text: str) -> np.ndarray:
+def extract_features(text: str) -> list[int]:
     """Extract features from the given text.
 
     Parameters
@@ -39,11 +37,11 @@ def extract_features(text: str) -> np.ndarray:
 
     Returns
     -------
-    np.ndarray
+    list[int]
         Feature vector.
     """
+    # split text into tokens
     tokens = tokenize(text)
 
-    vector = [1 if token in tokens else 0 for token in VOCABULARY]
-
-    return np.array(vector)
+    # create binary feature vector (1 if token of vocabulary is in text, 0 otherwise)
+    return [1 if token in tokens else 0 for token in VOCABULARY]

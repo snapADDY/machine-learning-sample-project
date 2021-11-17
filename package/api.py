@@ -1,30 +1,59 @@
-import numpy as np
-from classification import utils
-from classification.dtos import RequestDTO, ResponseDTO
-from falcon import Request, Response
-from falcon.status_codes import HTTP_OK
+import json
 
-MODEL = utils.load_model("logistic-regression.onnx")
+from falcon import HTTP_OK, HTTPBadRequest, HTTPInternalServerError, Request, Response
+from marshmallow import ValidationError
 
+from package.classification import classify_text
+from package.dtos import RequestDTO, ResponseDTO
+from package.logging import Logger
 
-def classify_text(text: str) -> tuple[str, float]:
-    prediction, probability = MODEL.run(None, {"input": np.array([[text]])})
-
-    return prediction[0], float(probability[0][prediction[0]])
+LOGGER = Logger(__name__)
 
 
 class HealthController:
     def on_get(self, request: Request, response: Response):
-        response.status = HTTP_OK
+        """Handle GET request.
+
+        Parameters
+        ----------
+        request : Request
+            A client's HTTP request.
+        response : Response
+            The HTTP response to a client request.
+        """
+        try:
+            request.media = {"healthy": True}
+            response.status = HTTP_OK
+        except Exception as error:
+            LOGGER.error(error)
+            raise HTTPInternalServerError(description="Unfortunately, an internal error occurred.")
 
 
 class ClassificationController:
     def on_post(self, request: Request, response: Response):
-        body = RequestDTO().loads(request.bounded_stream.read())
+        """Handle POST request.
 
-        label, probability = classify_text(body["text"])
+        Parameters
+        ----------
+        request : Request
+            A client's HTTP request.
+        response : Response
+            The HTTP response to a client request.
+        """
+        try:
+            try:
+                # load and validate request body
+                body = RequestDTO().loads(request.bounded_stream.read())
+            except ValidationError as error:
+                LOGGER.error(error.messages)
+                raise HTTPBadRequest(description=json.dumps(error.messages, sort_keys=True))
 
-        response.status = HTTP_OK
-        response.text = ResponseDTO().dumps(
-            {"label": label, "probability": probability}, ensure_ascii=False
-        )
+            # classify the given text
+            prediction = classify_text(body["text"])
+
+            # send response
+            response.status = HTTP_OK
+            response.text = ResponseDTO().dumps(prediction, ensure_ascii=False)
+        except Exception as error:
+            LOGGER.error(error)
+            raise HTTPInternalServerError(description="Unfortunately, an internal error occurred.")

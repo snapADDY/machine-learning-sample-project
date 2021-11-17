@@ -2,14 +2,14 @@ import json
 from argparse import ArgumentParser
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
-import stopwordsiso
 from skl2onnx import convert_sklearn
-from skl2onnx.common.data_types import StringTensorType
-from sklearn.feature_extraction.text import CountVectorizer
+from skl2onnx.common.data_types import Int64TensorType
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
-from sklearn.pipeline import Pipeline
+
+from package.featurization import VOCABULARY, extract_features
 
 
 def load_dataset(filepath: Path) -> pd.DataFrame:
@@ -29,41 +29,25 @@ def load_dataset(filepath: Path) -> pd.DataFrame:
         return pd.DataFrame(json.loads(line) for line in file)
 
 
-def export_pipeline(pipeline: Pipeline, filepath: Path, opset: int = 12):
-    """Export scikit-learn pipeline to ONNX.
+def export_model(model: LogisticRegression, filepath: Path, num_features: int):
+    """Export scikit-learn model to ONNX.
 
     Parameters
     ----------
-    pipeline : Pipeline
-        Pipeline to export.
+    model : LogisticRegression
+        Model to export.
+    num_features: int
+        Number of features the model expects.
     filepath : Path
-        Filepath to export pipeline to.
+        Filepath to export model to.
     opset : int
         ONNX opset number.
     """
-    initial_types = [("input", StringTensorType([None, 1]))]
-    onnx = convert_sklearn(model=pipeline, initial_types=initial_types, target_opset=opset)
+    initial_type = [("input", Int64TensorType((None, num_features)))]
+    onnx = convert_sklearn(model, initial_types=initial_type)
 
     with filepath.open("wb") as output:
         output.write(onnx.SerializeToString())
-
-
-def create_pipeline() -> Pipeline:
-    """Create a pipeline for bag-of-words and logistic regression.
-
-    The CountVectorizer uses German stopwords and no more than 10,000 features.
-
-    Returns
-    -------
-    Pipeline
-        Bag-of-words and logistic regression pipeline.
-    """
-    return Pipeline(
-        [
-            ("bow", CountVectorizer(stop_words=stopwordsiso.stopwords("de"))),
-            ("clf", LogisticRegression()),
-        ]
-    )
 
 
 if __name__ == "__main__":
@@ -77,30 +61,21 @@ if __name__ == "__main__":
     # load dataset from disk
     dataset = load_dataset(args.dataset_filepath)
 
-    # print some stats
-    print(dataset.loc[:, "label"].value_counts())
+    # prepare data
+    X = np.array([extract_features(example) for example in dataset.loc[:, "text"]])
+    y = dataset.loc[:, "label"].values
 
     if args.cross_validation:
-        print(f"Using {args.cross_validation}-fold cross validation")
-
         # model for evaluation
         model = LogisticRegression()
 
         # perform cross-validation
-        scores = cross_val_score(
-            model,
-            dataset.loc[:, "text"],
-            dataset.loc[:, "label"],
-            scoring="accuracy",
-            cv=args.cross_validation,
-            n_jobs=-1,
-        )
-
-        print(scores)
+        scores = cross_val_score(model, X, y, scoring="accuracy", cv=args.cross_validation)
+        print(f"{args.cross_validation}-fold cross validation:", scores)
 
     # train final model on full dataset
     model = LogisticRegression()
-    model.fit(dataset.loc[:, "text"], dataset.loc[:, "label"])
+    model.fit(X, y)
 
     # export to onnx
-    export_pipeline(model, filepath=args.model_filepath)
+    export_model(model, filepath=args.model_filepath, num_features=len(VOCABULARY))

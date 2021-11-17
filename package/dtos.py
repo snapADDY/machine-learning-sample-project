@@ -7,7 +7,7 @@ class RequestDTO(Schema):
         required=True,
         metadata={
             "example": "Die Sopranos ist eine US-amerikanische Fernsehserie.",
-            "description": "German text to classify.",
+            "description": "Text to classify.",
         },
     )
 
@@ -17,7 +17,7 @@ class ResponseDTO(Schema):
         required=True,
         metadata={
             "example": "Fernsehserie",
-            "description": "tba",
+            "description": "Predicted category label,",
         },
     )
 
@@ -25,6 +25,6 @@ class ResponseDTO(Schema):
         required=True,
         metadata={
             "example": 0.99,
-            "description": "tba",
+            "description": "Probability of the most likely label.",
         },
     )

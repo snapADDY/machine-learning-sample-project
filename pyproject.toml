@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "classification"
+name = "package"
 version = "0.1.0"
 description = "Example data science project"
 authors = ["snapADDY GmbH <info@snapaddy.com>"]
 license = "MIT"
-include = ["classification/model/*.onnx"]
+include = ["package/model/*.onnx"]
 
 [tool.poetry.dependencies]
 python = "3.9.*"
@@ -25,6 +25,7 @@ isort = "^5.10.1"
 pycln = "^1.1.0"
 skl2onnx = "^1.10.0"
 stopwordsiso = "^0.6.1"
+pytest = "^6.2.5"
 
 [tool.black]
 line-length = 99
