@@ -3,7 +3,7 @@ from package.featurization import extract_features, tokenize
 
 def test_tokenize():
     assert tokenize("foo BAR BAR foo Foo bar") == {"foo", "bar"}
-    assert tokenize("") == {""}
+    assert tokenize("") == set()
     assert tokenize("foo. Foo bar") == {"foo.", "foo", "bar"}
 
 
