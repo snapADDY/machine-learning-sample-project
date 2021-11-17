@@ -1,6 +1,6 @@
 from falcon import App
 
-from classification.api import ClassificationController
+from package.api import ClassificationController
 
 application = App()
 application.add_route("/classification", ClassificationController())

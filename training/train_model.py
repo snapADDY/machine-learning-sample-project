@@ -4,13 +4,12 @@ from pathlib import Path
 
 import pandas as pd
 import stopwordsiso
-import tqdm
 from skl2onnx import convert_sklearn
 from skl2onnx.common.data_types import StringTensorType
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
-from sklearn.model_selection import KFold
+from sklearn.model_selection import  cross_val_score
 from sklearn.pipeline import Pipeline
 
 
@@ -28,10 +27,10 @@ def load_dataset(filepath: Path) -> pd.DataFrame:
         DataFrame with text and labels.
     """
     with filepath.open("r", encoding="utf-8") as file:
-        return pd.DataFrame(json.loads(line) for line in tqdm.tqdm(file, desc="Loading data set"))
+        return pd.DataFrame(json.loads(line) for line in file)
 
 
-def export_pipeline(pipeline: Pipeline, filepath: Path):
+def export_pipeline(pipeline: Pipeline, filepath: Path, opset: int = 12):
     """Export scikit-learn pipeline to ONNX.
 
     Parameters
@@ -40,17 +39,18 @@ def export_pipeline(pipeline: Pipeline, filepath: Path):
         Pipeline to export.
     filepath : Path
         Filepath to export pipeline to.
+    opset : int
+        ONNX opset number.
     """
-    onnx = convert_sklearn(
-        model=pipeline, initial_types=[("input", StringTensorType([None, 1]))], target_opset=12
-    )
+    initial_types = [("input", StringTensorType([None, 1]))]
+    onnx = convert_sklearn(model=pipeline, initial_types=initial_types, target_opset=opset)
 
     with filepath.open("wb") as output:
         output.write(onnx.SerializeToString())
 
 
 def create_pipeline() -> Pipeline:
-    """Create a pipeline with bag-of-words and logistic regression.
+    """Create a pipeline for bag-of-words and logistic regression.
 
     The CountVectorizer uses German stopwords and no more than 10,000 features.
 
@@ -61,10 +61,7 @@ def create_pipeline() -> Pipeline:
     """
     return Pipeline(
         [
-            (
-                "tfidf",
-                CountVectorizer(stop_words=stopwordsiso.stopwords("de"), max_features=10000),
-            ),
+            ("bow", CountVectorizer(stop_words=stopwordsiso.stopwords("de"))),
             ("clf", LogisticRegression()),
         ]
     )
@@ -86,17 +83,14 @@ if __name__ == "__main__":
 
     if args.cross_validation:
         print(f"Using {args.cross_validation}-fold cross validation")
-        kf = KFold(n_splits=args.cross_validation, shuffle=True, random_state=42)
 
-        for train_index, test_index in kf.split(dataset):
-            train, test = dataset.iloc[train_index], dataset.iloc[test_index]
+        # pipelien for evaluation
+        pipeline = create_pipeline()
 
-            pipeline = create_pipeline()
-            pipeline.fit(train.loc[:, "text"], train.loc[:, "label"])
+        # perform cross-validation
+        scores = cross_val_score(pipeline, dataset.loc[:, "text"], dataset.loc[:, "label"], scoring="accuracy", cv=args.cross_validation, n_jobs=-1)
 
-            prediction = pipeline.predict(test.loc[:, "text"])
-
-            print(classification_report(test.loc[:, "label"], prediction))
+        print(scores)
 
     # train final model on full dataset
     pipeline = create_pipeline()
