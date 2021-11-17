@@ -1,0 +1,10 @@
+stages:
+  industry-classifier:
+    cmd: python training/train_model.py
+    deps:
+      - training/train_model.py
+      - training/dataset.ndjson
+      - classification/featurization.py
+      - classification/preprocessing.py
+    outs:
+      - classification/model/industry-classifier.onnx

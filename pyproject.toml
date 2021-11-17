@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "classification"
+version = "0.1.0"
+description = "Example data science project"
+authors = ["snapADDY GmbH <info@snapaddy.com>"]
+license = "MIT"
+include = ["classification/model/*.onnx"]
+
+[tool.poetry.dependencies]
+python = "3.9.*"
+falcon = "^3.0.1"
+gunicorn = "^20.1.0"
+marshmallow = "^3.14.1"
+numpy = "^1.21.4"
+onnxruntime = "^1.9.0"
+
+[tool.poetry.dev-dependencies]
+jupyterlab = "^3.2.3"
+pandas = "^1.3.4"
+pre-commit = "^2.15.0"
+scikit-learn = "^1.0.1"
+matplotlib = "^3.4.3"
+dvc = "^2.8.3"
+black = "^21.10b0"
+isort = "^5.10.1"
+pycln = "^1.1.0"
+tqdm = "^4.62.3"
+skl2onnx = "^1.10.0"
+stopwordsiso = "^0.6.1"
+
+[tool.black]
+line-length = 99
+
+[tool.isort]
+include_trailing_comma = true
+line_length = 99
+multi_line_output = 3
+use_parentheses = true
+
+[tool.pycln]
+all = true
+exclude = "__init__.py"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
