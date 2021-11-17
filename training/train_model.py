@@ -52,14 +52,14 @@ def export_model(model: LogisticRegression, filepath: Path, num_features: int):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--dataset-filepath", type=Path, required=True)
-    parser.add_argument("--model-filepath", type=Path, required=True)
+    parser.add_argument("--dataset", type=Path, required=True)
+    parser.add_argument("--model", type=Path, required=True)
     parser.add_argument("--cross-validation", type=int, default=5)
 
     args = parser.parse_args()
 
     # load dataset from disk
-    dataset = load_dataset(args.dataset_filepath)
+    dataset = load_dataset(args.dataset)
 
     # prepare data
     X = np.array([extract_features(example["text"]) for example in dataset])
@@ -78,4 +78,4 @@ if __name__ == "__main__":
     model.fit(X, y)
 
     # export to onnx
-    export_model(model, filepath=args.model_filepath, num_features=len(VOCABULARY))
+    export_model(model, filepath=args.model, num_features=len(VOCABULARY))

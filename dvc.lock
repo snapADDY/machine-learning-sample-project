@@ -1,0 +1,19 @@
+schema: '2.0'
+stages:
+  industry-classifier:
+    cmd: python training/train_model.py --dataset training/dataset.ndjson --model
+      package/model/logistic-regression.onnx
+    deps:
+    - path: package/featurization.py
+      md5: d10a72fe58dc94579826fe28ebbd35d7
+      size: 898
+    - path: training/dataset.ndjson
+      md5: 5772c8c1c82f831dbfc27994f696fcd9
+      size: 149651
+    - path: training/train_model.py
+      md5: 938deb1f591900230d08e76cbf7871d5
+      size: 2422
+    outs:
+    - path: package/model/logistic-regression.onnx
+      md5: 57612cf7e44fef55446c0b10964cc8b5
+      size: 785
