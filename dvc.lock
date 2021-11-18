@@ -8,12 +8,12 @@ stages:
       md5: d10a72fe58dc94579826fe28ebbd35d7
       size: 898
     - path: training/dataset.ndjson
-      md5: 5772c8c1c82f831dbfc27994f696fcd9
-      size: 149651
+      md5: 47423cc6669dd76c17a0bf9c345d3bc1
+      size: 148351
     - path: training/train_model.py
       md5: 938deb1f591900230d08e76cbf7871d5
       size: 2422
     outs:
     - path: package/model/logistic-regression.onnx
-      md5: 57612cf7e44fef55446c0b10964cc8b5
-      size: 785
+      md5: e31eff68c2e3421ba96cfd8732377ff2
+      size: 759
