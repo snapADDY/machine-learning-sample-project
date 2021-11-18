@@ -24,6 +24,7 @@ isort = "^5.10.1"
 pycln = "^1.1.0"
 pytest = "^6.2.5"
 skl2onnx = "^1.10.0"
+snakeviz = "^2.1.1"
 stopwordsiso = "^0.6.1"
 
 [tool.black]
