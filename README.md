@@ -62,6 +62,20 @@ $ curl \
 {"label": "show", "probability": 0.8808274865150452}
 ```
 
+## Profiling
+
+You can profile the application:
+
+```
+$ python tools/profiling.py
+```
+
+and inspect the stats with [SnakeViz](https://jiffyclub.github.io/snakeviz/):
+
+```
+$ snakeviz request.prof
+```
+
 ## License
 
 This package is licensed under the terms of the MIT license.
