@@ -18,7 +18,7 @@ Start the server locally:
 $ gunicorn application
 ```
 
-You can also start it in a Docker container. Build it:
+Alternatively, you can also start it in a Docker container. Build it:
 
 ```
 $ docker build -t machine-learning-application .
@@ -39,7 +39,7 @@ $ curl \
   --request POST \
   --data '{"text": "Die Sopranos ist eine US-amerikanische Fernsehserie."}' \
   http://0.0.0.0:8000/classification
-{"label": "Fernsehserie", "probability": 0.8808274865150452}
+{"label": "show", "probability": 0.8808274865150452}
 ```
 
 ## License
