@@ -19,7 +19,6 @@ def test_extract_features():
         0,
         0,
     ]
-
     assert extract_features("Die Sopranos ist eine US-amerikanische Fernsehserie") == [
         1,
         0,
@@ -31,7 +30,6 @@ def test_extract_features():
         0,
         0,
     ]
-
     assert extract_features("Pretzel Logic ist das dritte Studioalbum der Band Steely Dan") == [
         0,
         0,
@@ -43,5 +41,4 @@ def test_extract_features():
         0,
         0,
     ]
-
     assert extract_features("foo bar") == [0, 0, 0, 0, 0, 0, 0, 0, 0]
