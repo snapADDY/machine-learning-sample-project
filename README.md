@@ -4,13 +4,13 @@ This is an example project for a lightweight and ready-to-deploy machine learnin
 
 ## Installation
 
-Install both production and dev dependencies of the project with [Poetry](https://python-poetry.org/):
+Install dependencies with [Poetry](https://python-poetry.org/):
 
 ```
 $ poetry install
 ```
 
-To enforce consistency, make sure you install the pre-commit hooks as well:
+To enforce consistency, make sure you install the [pre-commit](https://pre-commit.com/) hooks as well:
 
 ```
 $ pre-commit install
@@ -18,13 +18,13 @@ $ pre-commit install
 
 ## Training
 
-Use DVC to check the status of the model:
+Use [DVC](https://dvc.org/) to check the status of the model:
 
 ```
 $ dvc status
 ```
 
-and train it, if necessary:
+and re-train it, if necessary:
 
 ```
 $ dvc repro
@@ -38,13 +38,13 @@ Start the server locally:
 $ gunicorn application
 ```
 
-Alternatively, you can also start it in a Docker container. Build it:
+Alternatively, you can also start it in a Docker container. Build it first:
 
 ```
 $ docker build -t machine-learning-application .
 ```
 
-and run it:
+and then run it:
 
 ```
 docker run -p 8000:8000 machine-learning-application
@@ -62,9 +62,17 @@ $ curl \
 {"label": "show", "probability": 0.8808274865150452}
 ```
 
+or check if the server is up and healthy:
+
+```
+$ curl \
+  --request GET \
+  http://0.0.0.0:8000/health
+```
+
 ## Profiling
 
-You can profile the application:
+You can also profile the application:
 
 ```
 $ python tools/profiling.py

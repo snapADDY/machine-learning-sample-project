@@ -31,7 +31,7 @@ USER wsgi
 EXPOSE 8000
 
 # define healthcheck
-HEALTHCHECK --interval=10s --timeout=1s --start-period=20s --retries=3 CMD curl -f localhost:8000/health || exit 1
+HEALTHCHECK --interval=1s --timeout=1s --start-period=20s --retries=3 CMD curl -f localhost:8000/health || exit 1
 
 # run application
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "application"]
