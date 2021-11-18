@@ -1,6 +1,14 @@
 import json
 
-from falcon import HTTP_OK, HTTPBadRequest, HTTPInternalServerError, Request, Response
+from falcon import (
+    HTTP_NO_CONTENT,
+    HTTP_OK,
+    HTTPBadRequest,
+    HTTPInternalServerError,
+    Request,
+    Response,
+)
+from falcon.status_codes import HTTP_INTERNAL_SERVER_ERROR
 from marshmallow import ValidationError
 
 from package.classification import classify_text
@@ -22,8 +30,15 @@ class HealthController:
             The HTTP response to a client request.
         """
         try:
-            request.media = {"healthy": True}
-            response.status = HTTP_OK
+            # classify example text
+            prediction = classify_text("Die Sopranos ist eine US-amerikanische Fernsehserie")
+
+            # make sure correct label is predicted
+            if prediction["label"] == "show":
+                response.status = HTTP_NO_CONTENT
+            else:
+                response.media = {"error": "Health check failed."}
+                response.status = HTTP_INTERNAL_SERVER_ERROR
         except Exception as error:
             LOGGER.error(error)
             raise HTTPInternalServerError(description="Unfortunately, an internal error occurred.")

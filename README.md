@@ -37,7 +37,7 @@ You can POST requets to the `/classification` endpoint:
 ```
 $ curl \
   --request POST \
-  --data '{"text": "Die Sopranos ist eine US-amerikanische Fernsehserie."}' \
+  --data '{"text": "Die Sopranos ist eine US-amerikanische Fernsehserie"}' \
   http://0.0.0.0:8000/classification
 {"label": "show", "probability": 0.8808274865150452}
 ```
