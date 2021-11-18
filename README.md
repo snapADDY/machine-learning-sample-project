@@ -10,6 +10,26 @@ Install both production and dev dependencies of the project with [Poetry](https:
 $ poetry install
 ```
 
+To enforce consistency, make sure you install the pre-commit hooks as well:
+
+```
+$ pre-commit install
+```
+
+## Training
+
+Use DVC to check the status of the model:
+
+```
+$ dvc status
+```
+
+and train it, if necessary:
+
+```
+$ dvc repro
+```
+
 ## Usage
 
 Start the server locally:

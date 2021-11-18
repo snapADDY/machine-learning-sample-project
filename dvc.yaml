@@ -1,5 +1,5 @@
 stages:
-  industry-classifier:
+  classifier:
     cmd: python training/train_model.py --dataset training/dataset.ndjson --model package/model/logistic-regression.onnx
     deps:
       - training/train_model.py
