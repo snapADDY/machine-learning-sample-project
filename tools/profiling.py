@@ -5,7 +5,7 @@ from package.api import ClassificationController
 
 
 class BoundedStreamMock:
-    def read(self) -> dict[str, str]:
+    def read(self) -> str:
         return json.dumps({"text": "Die Sopranos ist eine US-amerikanische Fernsehserie"})
 
 
