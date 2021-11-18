@@ -1,4 +1,5 @@
 .env
+.env-prod
 .python-version
 __pycache__
 .vscode
