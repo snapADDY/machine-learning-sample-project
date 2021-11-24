@@ -58,7 +58,7 @@ You can POST requets to the `/classification` endpoint:
 $ curl \
   --request POST \
   --data '{"text": "Die Sopranos ist eine US-amerikanische Fernsehserie"}' \
-  http://0.0.0.0:8000/classification
+  http://127.0.0.1:8000/classification
 {"label": "show", "probability": 0.8808274865150452}
 ```
 
@@ -67,7 +67,7 @@ or check if the server is up and healthy:
 ```
 $ curl \
   --request GET \
-  http://0.0.0.0:8000/health
+  http://127.0.0.1:8000/health
 ```
 
 ## Profiling

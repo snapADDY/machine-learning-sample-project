@@ -22,7 +22,7 @@ stages:
       package/model/logistic-regression.onnx
     deps:
     - path: package/featurization.py
-      md5: d10a72fe58dc94579826fe28ebbd35d7
+      md5: 89a31e19f4ce913115391b99093922d5
       size: 898
     - path: training/dataset.ndjson
       md5: 37d4e440fdc9cc60f63ab6d8ee82aa92
@@ -32,5 +32,5 @@ stages:
       size: 2422
     outs:
     - path: package/model/logistic-regression.onnx
-      md5: 6fc7e2b141ea6edf6f53926c27af41da
+      md5: 69ef99a0ef9fd9276ab7868daf1cee90
       size: 759
