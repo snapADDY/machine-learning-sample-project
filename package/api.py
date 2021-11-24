@@ -71,7 +71,7 @@ class ClassificationController:
 
             # send response
             response.status = HTTP_OK
-            response.text = ResponseDTO().dumps(prediction, ensure_ascii=False)
+            response.text = ResponseDTO().dumps(prediction, sort_keys=True)
             LOGGER.info("Sent response")
         except Exception as error:
             LOGGER.error(error)

@@ -16,7 +16,7 @@ class ResponseDTO(Schema):
     label = String(
         required=True,
         metadata={
-            "example": "Fernsehserie",
+            "example": "show",
             "description": "Predicted category label,",
         },
     )
