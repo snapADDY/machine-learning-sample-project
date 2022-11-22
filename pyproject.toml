@@ -7,14 +7,14 @@ license = "MIT"
 include = ["package/model/*.onnx"]
 
 [tool.poetry.dependencies]
-python = "3.9.*"
+python = "3.10.*"
 falcon = "^3.0.1"
 gunicorn = "^20.1.0"
 marshmallow = "^3.14.1"
 numpy = "^1.21.4"
 onnxruntime = "^1.9.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 jupyterlab = "^3.2.3"
 pre-commit = "^2.15.0"
 scikit-learn = "^1.0.1"
@@ -26,6 +26,13 @@ pytest = "^6.2.5"
 skl2onnx = "^1.10.0"
 snakeviz = "^2.1.1"
 stopwordsiso = "^0.6.1"
+transformers = "^4.24.0"
+optimum = "^1.5.0"
+ipywidgets = "^8.0.2"
+timy = "^0.4.2"
+pandas = "^1.5.1"
+matplotlib = "^3.6.2"
+datasets = "^2.7.0"
 
 [tool.black]
 line-length = 99
