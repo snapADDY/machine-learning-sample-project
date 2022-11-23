@@ -28,14 +28,22 @@ SESSION_OPTIONS = {
 
 
 class ONNXSearchSpace:
+    @property
+    def configs(self) -> list[SessionOptions]:
+        k, values = zip(*SESSION_OPTIONS.items())
+        return [DEFAULT_SESSION_OPTIONS] + [dict(zip(k, v)) for v in itertools.product(*values)]
+
     def __iter__(self) -> Iterator[SessionOptions]:
         keys, values = zip(*SESSION_OPTIONS.items())
         configs = [dict(zip(keys, v)) for v in itertools.product(*values)]
-        for config in [DEFAULT_SESSION_OPTIONS] + configs:
+        for config in self.configs:
             options = SessionOptions()
             for key, value in config.items():
                 setattr(options, key, value)
             yield options
+
+    def __len__(self) -> int:
+        return len(self.configs)
 
 
 class Timer:
@@ -59,7 +67,8 @@ class Timer:
 
     def plot(self):
         ax = pd.DataFrame(self._history).plot.box(vert=False)
-        ax.set_xlabel("time (s)")
+        ax.set_xlabel("time (ms)")
+        ax.set_xlim(0)
 
     def evaluate(self, f: Callable, x: str, verbosity: int = 1, return_median: bool = False):
         self._history[f.__name__] = []
@@ -68,9 +77,21 @@ class Timer:
             start_time = time.time()
             f(x)
             end_time = time.time()
-            self._history[f.__name__].append(end_time - start_time)
+            self._history[f.__name__].append((end_time - start_time) * 1000)
 
         if verbosity > 0:
             print(f"{f.__name__}: {self.history[f.__name__]}")
         if return_median:
             return statistics.median(self._history[f.__name__])
+
+    @property
+    def best_time(self) -> float:
+        return min(self.history.values(), key=self._select_median)
+
+    @property
+    def worst_time(self) -> float:
+        return max(self.history.values(), key=self._select_median)
+
+    @staticmethod
+    def _select_median(values: dict[str, float]) -> float:
+        return values["median"]
