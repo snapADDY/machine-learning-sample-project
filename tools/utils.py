@@ -21,8 +21,8 @@ SESSION_OPTIONS = {
     "enable_mem_pattern": [True, False],
     "execution_mode": [ExecutionMode.ORT_SEQUENTIAL, ExecutionMode.ORT_PARALLEL],
     "execution_order": [ExecutionOrder.DEFAULT, ExecutionOrder.PRIORITY_BASED],
-    "inter_op_num_threads": [0, 1, 2, 3, 4, 5],
-    "intra_op_num_threads": [0, 1, 2, 3, 4, 5],
+    "inter_op_num_threads": [0, 1, 2],
+    "intra_op_num_threads": [0, 1, 2],
     "use_deterministic_compute": [True, False],
 }
 
@@ -63,7 +63,7 @@ class Timer:
         }
 
     def summary(self):
-        return pd.DataFrame(self.history)
+        return pd.DataFrame(self.history).T.sort_values("median")
 
     def plot(self):
         ax = pd.DataFrame(self._history).plot.box(vert=False)
@@ -89,8 +89,8 @@ class Timer:
         return min(self.history.values(), key=self._select_median)
 
     @property
-    def worst_time(self) -> float:
-        return max(self.history.values(), key=self._select_median)
+    def baseline(self) -> float:
+        return self.history["simple_pipeline"]
 
     @staticmethod
     def _select_median(values: dict[str, float]) -> float:
