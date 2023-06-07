@@ -1,7 +1,7 @@
 default_stages: [commit]
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.4.0
   hooks:
   - id: end-of-file-fixer
     stages: [commit]
@@ -10,18 +10,18 @@ repos:
     stages: [commit]
 
 - repo: https://github.com/pre-commit/mirrors-isort
-  rev: v5.9.3
+  rev: v5.10.1
   hooks:
   - id: isort
     additional_dependencies: [toml]
 
 - repo: https://github.com/psf/black
-  rev: 21.9b0
+  rev: 23.3.0
   hooks:
   - id: black
 
 - repo: https://github.com/hadialqattan/pycln
-  rev: v1.0.3
+  rev: v2.1.5
   hooks:
     - id: pycln
       args: [--config=pyproject.toml]
