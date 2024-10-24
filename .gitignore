@@ -1,6 +1,6 @@
 .env
 .env-prod
-.python-version
+.venv
 __pycache__
 .vscode
 request.prof
