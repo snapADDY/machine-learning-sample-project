@@ -4,10 +4,10 @@ This is an example project for a lightweight and ready-to-deploy machine learnin
 
 ## Installation
 
-Install dependencies with [Poetry](https://python-poetry.org/):
+Install dependencies with [uv](https://docs.astral.sh/uv/):
 
 ```
-$ poetry install
+$ uv sync
 ```
 
 To enforce consistency, make sure you install the [pre-commit](https://pre-commit.com/) hooks as well:
