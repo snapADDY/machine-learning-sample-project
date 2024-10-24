@@ -1,7 +1,7 @@
 import itertools
 import statistics
 import time
-from typing import Callable, Iterator
+from collections.abc import Callable, Iterator
 
 import pandas as pd
 from onnxruntime import ExecutionMode, ExecutionOrder, SessionOptions
@@ -30,12 +30,14 @@ SESSION_OPTIONS = {
 class ONNXSearchSpace:
     @property
     def configs(self) -> list[SessionOptions]:
-        k, values = zip(*SESSION_OPTIONS.items())
-        return [DEFAULT_SESSION_OPTIONS] + [dict(zip(k, v)) for v in itertools.product(*values)]
+        k, values = zip(*SESSION_OPTIONS.items(), strict=False)
+        return [DEFAULT_SESSION_OPTIONS] + [
+            dict(zip(k, v, strict=False)) for v in itertools.product(*values)
+        ]
 
     def __iter__(self) -> Iterator[SessionOptions]:
-        keys, values = zip(*SESSION_OPTIONS.items())
-        configs = [dict(zip(keys, v)) for v in itertools.product(*values)]
+        keys, values = zip(*SESSION_OPTIONS.items(), strict=False)
+        configs = [dict(zip(keys, v, strict=False)) for v in itertools.product(*values)]
         for config in self.configs:
             options = SessionOptions()
             for key, value in config.items():

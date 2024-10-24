@@ -1,7 +1,6 @@
 import json
 from argparse import ArgumentParser
 from pathlib import Path
-from typing import Union
 
 import numpy as np
 from skl2onnx import convert_sklearn
@@ -12,7 +11,7 @@ from sklearn.model_selection import cross_val_score
 from package.featurization import VOCABULARY, extract_features
 
 
-def load_dataset(filepath: Path) -> list[dict[str, Union[str, int]]]:
+def load_dataset(filepath: Path) -> list[dict[str, str | int]]:
     """Load dataset from NDJSON file as list of dictionaries.
 
     Parameters
@@ -22,7 +21,7 @@ def load_dataset(filepath: Path) -> list[dict[str, Union[str, int]]]:
 
     Returns
     -------
-    list[dict[str, Union[str, int]]]
+    list[dict[str, str | int]]
         Data set as list of dictionaries.
     """
     with filepath.open("r", encoding="utf-8") as file:
