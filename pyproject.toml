@@ -1,52 +1,70 @@
-[tool.poetry]
+[project]
 name = "package"
 version = "0.1.0"
 description = "Example data science project"
-authors = ["snapADDY GmbH <info@snapaddy.com>"]
-license = "MIT"
-include = ["package/model/*.onnx"]
+readme = "README.md"
+requires-python = "==3.12.*"
+dependencies = [
+    "falcon>=4.0.1",
+    "gunicorn>=23.0.0",
+    "marshmallow>=3.23.0",
+    "numpy>=2.1.2",
+    "onnxruntime>=1.19.2",
+]
 
-[tool.poetry.dependencies]
-python = "3.11.*"
-falcon = "^3.0.1"
-gunicorn = "^20.1.0"
-marshmallow = "^3.14.1"
-numpy = "^1.21.4"
-onnxruntime = "^1.9.0"
+[tool.uv]
+dev-dependencies = [
+    "datasets>=3.0.2",
+    "dvc>=3.56.0",
+    "jupyterlab>=4.2.5",
+    "matplotlib>=3.9.2",
+    "optimum>=1.23.2",
+    "pandas>=2.2.3",
+    "pre-commit>=4.0.1",
+    "pytest>=8.3.3",
+    "scikit-learn>=1.5.2",
+    "skl2onnx>=1.17.0",
+    "snakeviz>=2.2.0",
+    "stopwordsiso>=0.6.1",
+    "transformers>=4.46.0",
+]
 
-[tool.poetry.group.dev.dependencies]
-jupyterlab = "^4.0.1"
-pre-commit = "^3.3.2"
-scikit-learn = "^1.0.1"
-dvc = "^2.8.3"
-black = "^23.3.0"
-isort = "^5.10.1"
-pycln = "^2.1.2"
-pytest = "^7.2.0"
-skl2onnx = "^1.10.0"
-snakeviz = "^2.1.1"
-stopwordsiso = "^0.6.1"
-transformers = "^4.24.0"
-optimum = "^1.5.0"
-ipywidgets = "^8.0.2"
-timy = "^0.4.2"
-pandas = "^2.0.2"
-matplotlib = "^3.6.2"
-datasets = "^2.7.0"
-
-[tool.black]
+[tool.ruff]
 line-length = 99
+extend-include = ["*.ipynb"]
 
-[tool.isort]
-include_trailing_comma = true
-line_length = 99
-multi_line_output = 3
-use_parentheses = true
+[tool.ruff.format]
+line-ending = "lf"
 
-[tool.pycln]
-all = true
-exclude = "__init__.py"
+[tool.ruff.lint]
+select = [
+    "YTT", # flake8-2020
+    "FBT", # flake8-boolean-trap
+    "B",   # flake8-bugbear
+    "S",   # flake8-bandit
+    "ISC", # flake8-implicit-str-concat
+    "ICN", # flake8-import-conventions
+    "PIE", # flake8-pie
+    "PYI", # flake8-pyi
+    "Q",   # flake8-quotes
+    "RSE", # flake8-raise
+    "RET", # flake8-return
+    "SIM", # flake8-simplify
+    "I",   # isort
+    "NPY", # NumPy-specific rules
+    "N",   # pep8-naming
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "D",   # pydocstyle
+    "F",   # Pyflakes
+    "UP",  # pyupgrade
+    "RUF", # Ruff-specific rules
+]
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
