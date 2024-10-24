@@ -2,7 +2,6 @@
 .env-prod
 .venv
 __pycache__
-.vscode
 request.prof
 .pytest_cache
 .ipynb_checkpoints
