@@ -3,6 +3,6 @@
 
 # include the following exceptions
 !pyproject.toml
-!poetry.lock
+!uv.lock
 !application.py
 !package/

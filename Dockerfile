@@ -1,4 +1,4 @@
-FROM python:3.9.6-slim as base
+FROM python:3.12.7-slim as base
 WORKDIR /opt/application
 
 RUN useradd --system wsgi \
