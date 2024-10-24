@@ -1,5 +1,3 @@
-from typing import Union
-
 import numpy as np
 
 from package.featurization import extract_features
@@ -8,7 +6,7 @@ from package.utils import load_model
 MODEL = load_model("logistic-regression.onnx")
 
 
-def classify_text(text: str) -> dict[str, Union[str, float]]:
+def classify_text(text: str) -> dict[str, str | float]:
     """Classify the given text into one of three Wikipedia categories.
 
     Parameters

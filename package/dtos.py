@@ -3,6 +3,8 @@ from marshmallow.fields import Float, String
 
 
 class RequestDTO(Schema):
+    """DTO for the request body."""
+
     text = String(
         required=True,
         metadata={
@@ -13,6 +15,8 @@ class RequestDTO(Schema):
 
 
 class ResponseDTO(Schema):
+    """DTO for the response body."""
+
     label = String(
         required=True,
         metadata={
