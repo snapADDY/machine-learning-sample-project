@@ -1,19 +1,22 @@
 import logging
 import sys
-from typing import Union
 
 DEBUG = 10
 INFO = 20
 WARNING = 30
 ERROR = 40
+
 LEVELS = {"DEBUG": DEBUG, "INFO": INFO, "WARNING": WARNING, "ERROR": ERROR}
+
 DEFAULT_FORMAT = logging.Formatter("[%(asctime)s] [%(levelname)s] %(message)s")
 DEBUG_FORMAT = logging.Formatter("[%(asctime)s] %(name)s:%(lineno)d [%(levelname)s] %(message)s")
 
 
 class Logger:
+    """Basic logger."""
+
     def __init__(self, name: str):
-        """Basic logger.
+        """Initialize logger.
 
         Parameters
         ----------
@@ -32,7 +35,14 @@ class Logger:
         # set level of both the logger and the handler
         self.set_level("INFO")
 
-    def set_level(self, level: Union[str, int]) -> None:
+    def set_level(self, level: str | int):
+        """Set the logger's level.
+
+        Parameters
+        ----------
+        level : str | int
+            Level to set the logger to.
+        """
         # translate string to integer
         if isinstance(level, str):
             level = LEVELS[level.upper()]
@@ -83,7 +93,7 @@ class Logger:
         if self._logger.isEnabledFor(WARNING):
             self._logger._log(WARNING, message, ())
 
-    def error(self, message: Union[str, Exception]) -> None:
+    def error(self, message: str | Exception) -> None:
         """Error log message.
 
         Parameters
@@ -100,7 +110,8 @@ class Logger:
 
     @property
     def in_debug_mode(self) -> bool:
-        """Checks if the logger's level is DEBUG.
+        """Check if the logger's level is DEBUG.
+
         Returns
         -------
         bool
@@ -110,7 +121,8 @@ class Logger:
 
     @property
     def level(self) -> int:
-        """Returns the current log level.
+        """Return the current log level.
+
         Returns
         -------
         int
@@ -118,5 +130,6 @@ class Logger:
         """
         return self._logger.level
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Representation of the logger."""
         return f"<Logger: {self.name} ({self.level})>"
