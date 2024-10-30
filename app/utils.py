@@ -2,8 +2,12 @@ from pathlib import Path
 
 from onnxruntime import InferenceSession
 
+from app.logging import Logger
 
-def load_model(name: str) -> InferenceSession:
+LOGGER = Logger(__name__)
+
+
+def load_model(name: str) -> InferenceSession | None:
     """Load classification model from disk.
 
     Parameters
@@ -13,8 +17,12 @@ def load_model(name: str) -> InferenceSession:
 
     Returns
     -------
-    InferenceSession
-        Session for inference.
+    InferenceSession | None
+        Session for inference (or None if no model available).
     """
     filepath = Path(__file__).parent.resolve() / "model" / name
-    return InferenceSession(filepath)
+    if filepath.exists():
+        return InferenceSession(filepath)
+
+    LOGGER.warning("No model found (can be ignored during training).")
+    return None

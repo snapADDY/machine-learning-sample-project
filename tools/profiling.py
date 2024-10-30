@@ -1,7 +1,7 @@
 import json
 from cProfile import Profile
 
-from package.api import ClassificationController
+from app.api import ClassificationController
 
 
 class BoundedStreamMock:

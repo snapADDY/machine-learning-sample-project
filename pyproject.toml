@@ -61,21 +61,20 @@ select = [
     "UP",  # pyupgrade
     "RUF", # Ruff-specific rules
 ]
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+]
 
 [tool.ruff.lint.per-file-ignores]
-"test_*.py" = [
+"tests/test_*.py" = [
     "D100", # Missing docstring in public module
     "D101", # Missing docstring in public class
     "D102", # Missing docstring in public method
     "D103", # Missing docstring in public function
     "D400", # First line should end with a period
     "D401", # First line should be in imperative mood
-    "E501", # Line too long
     "S101", # Use of `assert` detected
-]
-ignore = [
-    "D100", # Missing docstring in public module
-    "D104", # Missing docstring in public package
 ]
 
 [tool.ruff.lint.pydocstyle]
