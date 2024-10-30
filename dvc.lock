@@ -19,18 +19,22 @@ stages:
       size: 759
   classifier:
     cmd: python training/train_model.py --dataset training/dataset.ndjson --model
-      package/model/logistic-regression.onnx
+      app/model/logistic-regression.onnx
     deps:
-    - path: package/featurization.py
+    - path: app/featurization.py
+      hash: md5
       md5: 89a31e19f4ce913115391b99093922d5
       size: 898
     - path: training/dataset.ndjson
       md5: 37d4e440fdc9cc60f63ab6d8ee82aa92
       size: 148350
+      isexec: true
     - path: training/train_model.py
-      md5: 938deb1f591900230d08e76cbf7871d5
-      size: 2422
+      hash: md5
+      md5: 8f29342a1eda888f48c62800e40bb1af
+      size: 2381
     outs:
-    - path: package/model/logistic-regression.onnx
-      md5: 69ef99a0ef9fd9276ab7868daf1cee90
-      size: 759
+    - path: app/model/logistic-regression.onnx
+      hash: md5
+      md5: 85dc43a8f4953e01a3523b813044f207
+      size: 797

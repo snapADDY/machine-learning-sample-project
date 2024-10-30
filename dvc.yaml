@@ -1,9 +1,9 @@
 stages:
   classifier:
-    cmd: python training/train_model.py --dataset training/dataset.ndjson --model package/model/logistic-regression.onnx
+    cmd: python training/train_model.py --dataset training/dataset.ndjson --model app/model/logistic-regression.onnx
     deps:
       - training/train_model.py
       - training/dataset.ndjson
-      - package/featurization.py
+      - app/featurization.py
     outs:
-      - package/model/logistic-regression.onnx
+      - app/model/logistic-regression.onnx
