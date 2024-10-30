@@ -13,8 +13,8 @@ LOGGER = Logger(__name__)
 class HealthResource:
     """Resource for the health endpoint."""
 
-    def on_post(self, request: Request, response: Response):
-        """Handle POST requests.
+    def on_get(self, request: Request, response: Response):
+        """Handle GET requests.
 
         Parameters
         ----------

@@ -20,7 +20,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
   uv sync --frozen --no-cache --compile-bytecode
 
 # define healthcheck
-HEALTHCHECK --interval=1s --timeout=1s --start-period=20s --retries=3 CMD curl -f localhost:8000/health || exit 1
+HEALTHCHECK --interval=1s --timeout=1s --start-period=20s --retries=3 CMD curl -f http://0.0.0.0:8000/health || exit 1
 
 # run the application
 CMD ["/app/.venv/bin/gunicorn", "app:create_app()", "--bind", "0.0.0.0:8000"]
