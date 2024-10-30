@@ -8,7 +8,7 @@ from skl2onnx.common.data_types import Int64TensorType
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import cross_val_score
 
-from package.featurization import VOCABULARY, extract_features
+from app.featurization import VOCABULARY, extract_features
 
 
 def load_dataset(filepath: Path) -> list[dict[str, str | int]]:
