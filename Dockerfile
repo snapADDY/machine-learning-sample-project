@@ -1,37 +1,26 @@
-FROM python:3.12.7-slim as base
-WORKDIR /opt/application
+FROM python:3.12.7-slim
 
-RUN useradd --system wsgi \
-  && apt-get update \
-  && apt-get --yes install --no-install-recommends curl libgomp1 \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists \
-  && pip install poetry
+# install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-# create virtual environment (to keep things clean with poetry etc.)
-ENV VIRTUAL_ENV=/opt/venv
-RUN python -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+# change the working directory to the `app` directory
+WORKDIR /app
 
-# copy appilcation file for gunicorn
-COPY application.py ./
+# install dependencies
+RUN --mount=type=cache,target=/root/.cache/uv \
+  --mount=type=bind,source=uv.lock,target=uv.lock \
+  --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+  uv sync --frozen --no-install-project
 
-# copy pyproject.toml and lockfile
-COPY pyproject.toml poetry.lock ./
+# copy the project into the image
+ADD . /app
 
-# copy package
-COPY package ./package
-
-# install only prod dependencies
-RUN poetry install --no-dev
-
-USER wsgi
-
-# expose port 8000 for external use
-EXPOSE 8000
+# sync the project
+RUN --mount=type=cache,target=/root/.cache/uv \
+  uv sync --frozen --no-cache --compile-bytecode
 
 # define healthcheck
 HEALTHCHECK --interval=1s --timeout=1s --start-period=20s --retries=3 CMD curl -f localhost:8000/health || exit 1
 
-# run application
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "application"]
+# run the application
+CMD ["/app/.venv/bin/gunicorn", "app:create_app()", "--bind", "0.0.0.0:8000"]
