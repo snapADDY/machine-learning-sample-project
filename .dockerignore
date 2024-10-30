@@ -5,4 +5,4 @@
 !pyproject.toml
 !uv.lock
 !application.py
-!package/
+!app/

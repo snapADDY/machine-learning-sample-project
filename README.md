@@ -35,7 +35,7 @@ $ dvc repro
 Start the server locally:
 
 ```
-$ gunicorn application
+$ gunicorn "app:create_app()" --bind 0.0.0.0:8000
 ```
 
 Alternatively, you can also start it in a Docker container. Build it first:
@@ -57,8 +57,9 @@ You can POST requets to the `/classification` endpoint:
 ```
 $ curl \
   --request POST \
+  --header 'Content-Type: application/json' \
   --data '{"text": "Die Sopranos ist eine US-amerikanische Fernsehserie"}' \
-  http://127.0.0.1:8000/classification
+  http://127.0.0.1:8000/v1/classification
 {"label": "show", "probability": 0.8808274865150452}
 ```
 

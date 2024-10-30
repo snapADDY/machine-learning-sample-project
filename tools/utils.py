@@ -28,33 +28,41 @@ SESSION_OPTIONS = {
 
 
 class ONNXSearchSpace:
+    """Search space over ONNX session options."""
+
     @property
     def configs(self) -> list[SessionOptions]:
-        k, values = zip(*SESSION_OPTIONS.items(), strict=False)
-        return [DEFAULT_SESSION_OPTIONS] + [
-            dict(zip(k, v, strict=False)) for v in itertools.product(*values)
-        ]
+        """Create a list of configurations."""
+        # extract the keys and the list of values for each key
+        keys = list(SESSION_OPTIONS)
+        values = [SESSION_OPTIONS[key] for key in keys]
+
+        # create all combinations of values
+        combinations = itertools.product(*values)
+
+        # Build the list of dictionaries for each combination
+        return [dict(zip(keys, combination, strict=False)) for combination in combinations]
 
     def __iter__(self) -> Iterator[SessionOptions]:
-        keys, values = zip(*SESSION_OPTIONS.items(), strict=False)
-        configs = [dict(zip(keys, v, strict=False)) for v in itertools.product(*values)]
+        """Iterate over the configurations."""
         for config in self.configs:
-            options = SessionOptions()
-            for key, value in config.items():
-                setattr(options, key, value)
-            yield options
+            yield SessionOptions(**config)
 
     def __len__(self) -> int:
+        """Get the number of configurations."""
         return len(self.configs)
 
 
 class Timer:
+    """Timer to profile runtime and stuff."""
+
     def __init__(self, num_loops: int = 1_000):
         self.num_loops = num_loops
         self._history = {}
 
     @property
     def history(self):
+        """Return the history of the timer."""
         return {
             task: {
                 "mean": statistics.mean(times),
@@ -65,14 +73,41 @@ class Timer:
         }
 
     def summary(self):
+        """Get a summary."""
         return pd.DataFrame(self.history).T.sort_values("median")
 
     def plot(self):
+        """Plot the history."""
         ax = pd.DataFrame(self._history).plot.box(vert=False)
         ax.set_xlabel("time (ms)")
         ax.set_xlim(0)
 
-    def evaluate(self, f: Callable, x: str, verbosity: int = 1, return_median: bool = False):
+    def evaluate(
+        self,
+        f: Callable,
+        x: str,
+        *,
+        verbosity: int = 1,
+        return_median: bool = False,
+    ) -> float | None:
+        """Evaluate the function `f` with input `x`.
+
+        Parameters
+        ----------
+        f : Callable
+            Function to evaluate.
+        x : str
+            Input to the function.
+        verbosity : int, optional
+            Verbosity level, by default 1.
+        return_median : bool, optional
+            If True, return the median time, by default False.
+
+        Returns
+        -------
+        float | None
+            Median time if `return_median` is True, None otherwise.
+        """
         self._history[f.__name__] = []
 
         for _ in range(self.num_loops):
@@ -83,17 +118,23 @@ class Timer:
 
         if verbosity > 0:
             print(f"{f.__name__}: {self.history[f.__name__]}")
+
         if return_median:
             return statistics.median(self._history[f.__name__])
 
+        return None
+
     @property
     def best_time(self) -> float:
+        """Best time."""
         return min(self.history.values(), key=self._select_median)
 
     @property
     def baseline(self) -> float:
+        """Baseline time."""
         return self.history["simple_pipeline"]
 
     @staticmethod
     def _select_median(values: dict[str, float]) -> float:
+        """Select the median value from a dictionary."""
         return values["median"]

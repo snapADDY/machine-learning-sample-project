@@ -1,20 +1,18 @@
-import json
 from cProfile import Profile
 
-from app.api import ClassificationController
-
-
-class BoundedStreamMock:
-    def read(self) -> str:
-        return json.dumps({"text": "Die Sopranos ist eine US-amerikanische Fernsehserie"})
+from app.api.resources import ClassificationResource
 
 
 class RequestMock:
-    bounded_stream = BoundedStreamMock()
+    """Mock for the request object."""
+
+    def get_media(self) -> dict[str, str]:
+        """Mock for the `get_media` method."""
+        return {"text": "Die Sopranos ist eine US-amerikanische Fernsehserie"}
 
 
 class ResponseMock:
-    pass
+    """Mock for the response object."""
 
 
 if __name__ == "__main__":
@@ -22,7 +20,7 @@ if __name__ == "__main__":
     profiler = Profile()
 
     # set up controller
-    controller = ClassificationController()
+    controller = ClassificationResource()
 
     # mock request and response
     request = RequestMock()
