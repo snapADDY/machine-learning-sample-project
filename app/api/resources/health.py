@@ -4,8 +4,8 @@ from falcon import (
     Response,
 )
 
-from package.classification import classify_text
-from package.logging import Logger
+from app.classification import classify_text
+from app.logging import Logger
 
 LOGGER = Logger(__name__)
 

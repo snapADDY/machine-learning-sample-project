@@ -1,7 +1,7 @@
 import numpy as np
 
-from package.featurization import extract_features
-from package.utils import load_model
+from app.featurization import extract_features
+from app.utils import load_model
 
 MODEL = load_model("logistic-regression.onnx")
 

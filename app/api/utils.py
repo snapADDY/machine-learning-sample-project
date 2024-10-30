@@ -3,7 +3,7 @@ from typing import Any
 from falcon import HTTPBadRequest, HTTPError, HTTPInternalServerError, Request, Response
 from marshmallow import ValidationError
 
-from package.logging import Logger
+from app.logging import Logger
 
 LOGGER = Logger(__name__)
 

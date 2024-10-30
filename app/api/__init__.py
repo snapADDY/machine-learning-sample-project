@@ -1,1 +1,1 @@
-from package.api.app import Application as Application
+from app.api.core import create_app as create_app
