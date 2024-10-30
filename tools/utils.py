@@ -37,16 +37,19 @@ class ONNXSearchSpace:
         keys = list(SESSION_OPTIONS)
         values = [SESSION_OPTIONS[key] for key in keys]
 
-        # create all combinations of values
-        combinations = itertools.product(*values)
-
         # Build the list of dictionaries for each combination
-        return [dict(zip(keys, combination, strict=False)) for combination in combinations]
+        return [DEFAULT_SESSION_OPTIONS] + [
+            {key: value for key, value in zip(keys, combination, strict=False)}
+            for combination in itertools.product(*values)
+        ]
 
     def __iter__(self) -> Iterator[SessionOptions]:
         """Iterate over the configurations."""
         for config in self.configs:
-            yield SessionOptions(**config)
+            options = SessionOptions()
+            for key, value in config.items():
+                setattr(options, key, value)
+            yield options
 
     def __len__(self) -> int:
         """Get the number of configurations."""
@@ -78,7 +81,9 @@ class Timer:
 
     def plot(self):
         """Plot the history."""
-        ax = pd.DataFrame(self._history).plot.box(vert=False)
+        df = pd.DataFrame(self._history)
+        medians = df.median().sort_values(ascending=False)
+        ax = df[medians.index].plot.box(vert=False)
         ax.set_xlabel("time (ms)")
         ax.set_xlim(0)
 
