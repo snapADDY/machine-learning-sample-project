@@ -1,4 +1,4 @@
-from package.featurization import extract_features, tokenize
+from app.featurization import extract_features, tokenize
 
 
 def test_tokenize():

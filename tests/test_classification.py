@@ -1,4 +1,4 @@
-from package.classification import classify_text
+from app.classification import classify_text
 
 
 def test_classify_text():
